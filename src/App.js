@@ -1,21 +1,47 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [submitting, setSubmitting] = useState(false);
+  const handleSubmit = event => {
+    event.preventDefault();
+    setSubmitting(true);
+    
+    // simulating an API call
+    setTimeout(() => {
+      setSubmitting(false);
+    }, 3000)
+  }
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Enter character name in the field provided
         </p>
+        <div className="searchField">
+          {submitting &&
+          <div>Submitting Form...</div>
+          } {/* we use the AND operator to have this only when submitting is true */}
+          
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <label>
+                <p>Name</p>
+                <input name="character" />
+              </label>
+            </fieldset>
+            <button type="submit">Search</button>
+          </form>
+        </div>
         <a
-          className="App-link"
-          href="https://reactjs.org"
+          className="API-link"
+          href="https://swapi.dev/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          API Link
         </a>
       </header>
     </div>
