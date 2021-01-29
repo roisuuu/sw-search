@@ -3,14 +3,28 @@ import './App.css';
 import { useState, useReducer } from 'react';
 
 const formReducer = (state, event) => {
-  return {
-    ...state,
-    [event.name]: event.value
+  // return {
+  //   ...state,
+  //   [event.name]: event.value
+  // }
+
+  if (event.reset) {
+    return {
+      name: '',
+    }
+  } else {
+    return {
+      ...state,
+      [event.name]: event.value
+    }
   }
 }
 
 function App() {
-  const [formData, setFormData] = useReducer(formReducer, {});
+  const [formData, setFormData] = useReducer(formReducer, {
+    // setting a default value for the input
+    // name: "Luke Skywalker", 
+  });
   const [submitting, setSubmitting] = useState(false);
   const handleSubmit = event => {
     event.preventDefault();
@@ -18,6 +32,9 @@ function App() {
     // simulating an API call
     setTimeout(() => {
       setSubmitting(false);
+      setFormData({
+        reset: true
+      })
     }, 3000)
   }
 
@@ -56,7 +73,7 @@ function App() {
             <fieldset>
               <label>
                 <p>Name</p>
-                <input name="name" onChange={handleChange}/>
+                <input name="name" onChange={handleChange} value={formData.name || ''} placeholder={"e.g. Luke Skywalker"}/>
               </label>
             </fieldset>
             <button type="submit">Search</button>
