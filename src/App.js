@@ -1,6 +1,8 @@
 // import logo from './logo.svg';
-import './App.css';
+// import './App.css';
 import { useState, useReducer } from 'react';
+
+import CharInfo from './CharInfo';
 
 const formReducer = (state, event) => {
   // return {
@@ -26,16 +28,45 @@ function App() {
     // name: "Luke Skywalker", 
   });
   const [submitting, setSubmitting] = useState(false);
+  const [results, setResults] = useState(false);
+  const [lastSearched, setLastSearched] = useState("");
+  let APIData = [];
+
   const handleSubmit = event => {
     event.preventDefault();
     setSubmitting(true);
     // simulating an API call
-    setTimeout(() => {
-      setSubmitting(false);
-      setFormData({
+    // setTimeout(() => {
+    //   setSubmitting(false);
+    //   setFormData({
+    //     reset: true
+    //   })
+    //   console.log(formData);
+    //   // feed formData into API call function
+
+    // }, 3000)
+
+    findCharacter(formData.name);
+  }
+
+  // this function does the API call
+  const findCharacter = (name) => {
+    setSubmitting(false);
+    setFormData({
         reset: true
-      })
-    }, 3000)
+    });
+
+    fetch(`https://swapi.dev/api/people/?search=${name}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            APIData = data; 
+            setResults(true);
+            setLastSearched(name);
+            console.log(APIData.results);
+        })
+
+        // TODO: set results to false in the case of an error
   }
 
   const handleChange = event => {
@@ -70,7 +101,7 @@ function App() {
           {/* we use the AND operator to have this only when submitting is true */}
 
           <form onSubmit={handleSubmit}>
-            <fieldset>
+            <fieldset disabled={submitting}>
               <label>
                 <p>Name</p>
                 <input name="name" onChange={handleChange} value={formData.name || ''} placeholder={"e.g. Luke Skywalker"}/>
@@ -88,6 +119,10 @@ function App() {
           API Link
         </a>
       </header>
+      {results && <p>You last searched for: {lastSearched}</p>}
+      {/*results && APIData.results.map((item) => (
+          <CharInfo key={item.url} data={item} />
+      ))*/}
     </div>
   );
 }
