@@ -1,17 +1,54 @@
 // import logo from './logo.svg';
-import './App.css';
+import './styles.css';
+import React, {useState, useEffect} from 'react';
+import { getCharacterID } from './helper';
 
 function App() {
+  const [name, setName] = useState('');
+  const [charList, setCharList] = useState([]);
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  }
+
+  // async function as this needs to send an API request
+  const handleChange = async (event) => {
+    setName(event.target.value);
+  }
+
+  useEffect(async () => {
+    setCharList(await fetchAllCharacters());
+  }, []); // test -> do I need the [] at the end?
+
+  // the characters that actually correspond to the query
+  const matched = charList.filter(c => c.name.toLowerCase().includes(name.toLowerCase()));
   return (
     <div className="App">
-      <header className="App-header">
+      <header className="app-header">
         <p>
           Enter character name in the field provided
         </p>
            
-        <div className="searchField">
+        <div className="flex-container" id="searchField">
+          <form onSubmit={handleSubmit}>
+            <input type='text' value={name} onChange={handleChange} placeholder='e.g Skywalker' />
+            <button type="submit"> Search </button>
+          </form>
           
+        </div>
+
+        <div className="flex-container" id="charList">
+          {charList.length === 0 && 'Loading...'}
+          {charList.length > 0 && matched === 0 && <div>No matches found with query {name}</div>}
+          {charList.length > 0 && name.length === 0 && <div>Please enter a name to begin search</div>}
+          {name.length > 0 && matched.map((character, index) => {
+            return (
+              <div className='character' key={`swchar-${getCharacterID(character.url)}`}>
+                <div>{character.name}</div>
+              </div>
+            )
+          })}
+
         </div>
         <a
           className="API-link"
@@ -22,10 +59,6 @@ function App() {
           API Link
         </a>
       </header>
-      {results && <p>You last searched for: {lastSearched}</p>}
-      {/*results && APIData.results.map((item) => (
-          <CharInfo key={item.url} data={item} />
-      ))*/}
     </div>
   );
 }

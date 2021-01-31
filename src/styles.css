@@ -1,0 +1,15 @@
+.app-header {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  background-color: rgb(168, 130, 195);
+}
+
+.app-header > p {
+  font-size: large;
+  font-style: italic;
+}
+
+.flex-container {
+  display: flex;
+}

@@ -4,7 +4,6 @@ import React from "react";
 
 function CharInfo(props) {
     //console.log(props.data);
-    console.log(props.key);
     return (
         <div className="InfoBox">
             <p>
