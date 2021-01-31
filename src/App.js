@@ -22,6 +22,10 @@ function App() {
           API Link
         </a>
       </header>
+      {results && <p>You last searched for: {lastSearched}</p>}
+      {/*results && APIData.results.map((item) => (
+          <CharInfo key={item.url} data={item} />
+      ))*/}
     </div>
   );
 }
