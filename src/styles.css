@@ -13,3 +13,9 @@
 .flex-container {
   display: flex;
 }
+
+.character {
+  display: flex;
+  margin: 30px;
+  padding: 20px;
+}

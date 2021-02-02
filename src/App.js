@@ -2,6 +2,7 @@
 import './styles.css';
 import React, {useState, useEffect} from 'react';
 import { getCharacterID } from './helper';
+import { fetchAllCharacters } from './API';
 
 function App() {
   const [name, setName] = useState('');
@@ -18,7 +19,7 @@ function App() {
 
   useEffect(async () => {
     setCharList(await fetchAllCharacters());
-  }, []); // test -> do I need the [] at the end?
+  }, []); // note: empty array as second argument so the effect runs only once, avoiding infinite loop
 
   // the characters that actually correspond to the query
   const matched = charList.filter(c => c.name.toLowerCase().includes(name.toLowerCase()));
@@ -39,11 +40,11 @@ function App() {
 
         <div className="flex-container" id="charList">
           {charList.length === 0 && 'Loading...'}
-          {charList.length > 0 && matched === 0 && <div>No matches found with query {name}</div>}
+          {charList.length > 0 && matched.length === 0 && <div>No matches found with query {name}</div>}
           {charList.length > 0 && name.length === 0 && <div>Please enter a name to begin search</div>}
           {name.length > 0 && matched.map((character, index) => {
             return (
-              <div className='character' key={`swchar-${getCharacterID(character.url)}`}>
+              <div className='flex-container' id='character' key={`swchar-${getCharacterID(character.url)}`}>
                 <div>{character.name}</div>
               </div>
             )
