@@ -3,10 +3,12 @@ import './styles.css';
 import React, {useState, useEffect} from 'react';
 import { getCharacterID } from './helper';
 import { fetchAllCharacters } from './API';
+import CharInfo from './CharInfo';
 
 function App() {
   const [name, setName] = useState('');
   const [charList, setCharList] = useState([]);
+  const [selected, setSelected] = useState("");
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -15,6 +17,11 @@ function App() {
   // async function as this needs to send an API request
   const handleChange = async (event) => {
     setName(event.target.value);
+  }
+
+  const handleClick = (event) => {
+    setSelected(event.target.value);
+    console.log(selected);
   }
 
   useEffect(async () => {
@@ -45,10 +52,12 @@ function App() {
           {name.length > 0 && matched.map((character, index) => {
             return (
               <div className='flex-container' id='character' key={`swchar-${getCharacterID(character.url)}`}>
-                <div>{character.name}</div>
+                <button onClick={handleClick} value={getCharacterID(character.url)}>{character.name}</button>
               </div>
             )
           })}
+
+          {selected && <CharInfo charID={selected} data={charList} />}
 
         </div>
         <a

@@ -20,3 +20,23 @@ export const fetchAllCharacters = async () => {
     console.log(characters);
     return characters;
 }
+
+export const getCharacterByID = async (id) => {
+    const response = await Axios.get(`https://swapi.dev/api/people/${id}/`);
+    return response.data;
+}
+
+export const getHomeWorld = async (url) => {
+    const response = await Axios.get(url);
+    return response.data.name;
+}
+
+export const getFilms = async (films) => {
+    let filmNames = [];
+    for (const film of films) {
+        const response = await Axios.get(film);
+        filmNames.push(response.data.title);
+    }
+
+    return filmNames;
+}
